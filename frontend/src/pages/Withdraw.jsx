@@ -26,6 +26,7 @@ import authService from "../services/authService";
 import ShowBalance from "../components/ShowBalance";
 import Navbar from "../components/Navbar";
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
+import toast from 'react-hot-toast';
 
 // create schema validation
 const schema = yup.object({
@@ -53,6 +54,14 @@ const Withdraw = () => {
 
     const onSubmit = (data) => {
         // console.log(data);
+        if(data.value > accountInfo.accBalance){
+            // toast.error("Withdrawal amount greater than Current Acc Balance");
+            setTransactionStatus("error");
+            setErrorMsg("Withdrawal amount greater than Current Acc Balance");
+            setModalOpen(true);
+            reset();
+            return;
+        }
         userService.postWithdrawal(data).then((res)=>{
             console.log(res);
             setTransactionStatus("success");
