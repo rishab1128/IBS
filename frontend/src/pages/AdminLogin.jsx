@@ -102,5 +102,4 @@ const AdminLogin = () => {
   )
 }
 
-// export default {LoginForm,userId};
 export default AdminLogin;
