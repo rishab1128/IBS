@@ -1,0 +1,79 @@
+.home-container {
+    text-align: center;
+    background-color: #f5f5f5;
+    padding: 20px;
+  }
+  
+.home-header {
+  background-color: #007bff;
+  color: #fff;
+  padding: 50px 0;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.home-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.home-footer {
+  background-color: #333;
+  color: #fff;
+  padding: 10px 0;
+}
+
+.home-content {
+  display: flex;
+  justify-content: space-around;
+  padding: 50px 0;
+}
+
+.feature-box {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.feature-box:hover {
+  transform: translateY(-5px);
+}
+
+.feature-box h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.login-signup-section {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 50px;
+}
+
+.login-section,
+.signup-section,
+.openacc-section {
+  width: 45%;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.login-section:hover,
+.signup-section:hover,
+.openacc-section:hover {
+  transform: translateY(-5px);
+}
+
+.login-section h2,
+.signup-section h2,
+.openacc-section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+
