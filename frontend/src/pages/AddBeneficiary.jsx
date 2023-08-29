@@ -9,6 +9,7 @@ import Navbar from "../components/Navbar";
 import { toast } from "react-hot-toast";
 import authService from "../services/authService";
 import userService from "../services/userService";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -44,12 +45,17 @@ const AddBeneficiary = () => {
       toast.success('Beneficiary Added Successfully');
       // navigate({pathname:`/userDashboard/${accInfo?.userId}`}, {state:{userId: accInfo?.userId}});
     }).catch((error)=>{
-      toast.error('Error encountered');
+      const errMsg = error.data.messageString;
+      toast.error(`${errMsg.substring(0,errMsg.length-3)}`);
       console.log(error);
     })
     reset();
     setIsSubmitted(false);
   }
+
+  const navigate = useNavigate();
+
+  
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
@@ -85,6 +91,7 @@ const AddBeneficiary = () => {
                     fullWidth
                     variant="contained"
                     sx={{ mt: 3, mb: 2 }}
+                    onClick={()=>{navigate("/showbeneficiary")}}
                 >Show Beneficiaries</Button>
             </Box>
         </Container>

@@ -42,6 +42,9 @@ class userService{
     postPendingUsers(data){
         return http.post(`${BASE_URL}/admin/userlist_requested`,data);
     }
+    deletePendingUsers(accNo){
+        return axios.delete(`${BASE_URL}/admin/userlist_requested/${accNo}`);
+    }
 }
 
 export default new userService();

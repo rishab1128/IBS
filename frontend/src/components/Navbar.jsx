@@ -54,7 +54,7 @@ const Navbar = () => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap>
-            Bank Account Dashboard
+              Hello! {accountInfo.userId}
           </Typography>
           <Button variant="contained" color="secondary" startIcon={<CurrencyRupeeIcon />} sx={{ marginLeft: "auto" }} onClick={handleOpen}>Show Balance</Button>
           <Modal

@@ -46,7 +46,7 @@ const style = {
 
 function PendingUsers() {
   const [pendingUsers, setPendingUsers] = useState([
-    { accNo: '12345', firstName: 'John', lastName: 'Doe' },
+    // { accNo: '12345', firstName: 'John', lastName: 'Doe' },
     // Add more pending users here
   ]);
 
@@ -66,11 +66,18 @@ function PendingUsers() {
         }
     }
 
-  const handleDelete = (index) => {
-    toast.error("User rejected!");
-    const updatedPendingUsers = pendingUsers.filter((user, i) => i !== index);
-    setPendingUsers(updatedPendingUsers);
-  };
+    const handleDelete = (index) => {
+      const pendingUser = pendingUsers[index];
+      userService.deletePendingUsers(pendingUser?.accNo).then((res)=>{
+        toast.error("User deleted successfully");
+        console.log(res);
+      }).catch((err)=>{
+        toast.error("Error!!!");
+        console.log(err);
+      })
+      const updatedPendingUsers = pendingUsers.filter((user, i) => i !== index);
+      setPendingUsers(updatedPendingUsers);
+    };
 
   const navigate = useNavigate();
 
