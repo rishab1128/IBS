@@ -30,6 +30,8 @@ import CheckIcon from '@mui/icons-material/Check';
 import userService from '../services/userService';
 import authService from "../services/authService";
 import AdminSidebar from '../components/AdminSidebar';
+import Pagination from '@mui/material/Pagination';
+
 
 const style = {
   position: 'absolute',
@@ -45,8 +47,7 @@ const style = {
 
 function ApprovedUsers() {
   const [approvedUsers, setApprovedUsers] = useState([
-    { accNo: '12345', firstName: 'John', lastName: 'Doe', accBalance:10 },
-    // Add more pending users here
+    // { accNo: '12345', firstName: 'John', lastName: 'Doe', accBalance:10 },
   ]);
 
 
@@ -76,20 +77,34 @@ function ApprovedUsers() {
     const authUser = authService.getAuthUser();  
     const fetchData =  async () => {
         try {
-        const result = await userService.getApprovedUsers();
-        console.log(result);
-        setApprovedUsers(result?.data)
+          const result = await userService.getApprovedUsers();
+          console.log(result);
+          const sortedRes = result?.data.sort((a, b) => b.accNo - a.accNo)
+          setApprovedUsers(sortedRes)
         } catch (error) {
-        console.log("Err : " , error);
+          console.log("Err : " , error);
         }
     }
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const entriesPerPage = 2;
 
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
+    const indexOfLastEntry = currentPage * entriesPerPage;
+    const indexOfFirstEntry = indexOfLastEntry - entriesPerPage;
+    const currentEntries = approvedUsers.slice(indexOfFirstEntry, indexOfLastEntry);
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!isSidebarOpen);
-  };
+    const totalPages = Math.ceil(approvedUsers.length / entriesPerPage);
+
+    const handlePageChange = (newPage) => {
+      setCurrentPage(newPage);
+    };
+
+
+    const [isSidebarOpen, setSidebarOpen] = useState(false);
+
+    const toggleSidebar = () => {
+      setSidebarOpen(!isSidebarOpen);
+    };
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
@@ -130,7 +145,7 @@ function ApprovedUsers() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {approvedUsers.map((user, index) => (
+                {currentEntries.map((user, index) => (
                   <TableRow key={index}>
                     <TableCell>{user?.accNo}</TableCell>
                     <TableCell>{user?.firstName}</TableCell>
@@ -189,6 +204,14 @@ function ApprovedUsers() {
               }
             </Table>
           </TableContainer>
+          <Container sx={{ marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Pagination
+              count={totalPages}
+              page={currentPage}
+              onChange={(event, newPage) => handlePageChange(newPage)}
+              color="primary"
+            />
+        </Container>
         </Paper>
       </Container>
     </div>

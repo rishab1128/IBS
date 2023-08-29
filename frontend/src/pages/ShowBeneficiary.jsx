@@ -20,6 +20,7 @@ import userService from '../services/userService';
 import authService from "../services/authService";
 import ShowBalance from '../components/ShowBalance';
 import Navbar from '../components/Navbar';
+import Pagination from '@mui/material/Pagination';
 
 
 
@@ -32,7 +33,7 @@ const ShowBeneficiary = () => {
 
   const authUser = authService.getAuthUser();
 
-  const [acc,setAcc] = useState([{}]);
+  const [benef,setBenef] = useState([{}]);
 
   useEffect(() => {
     fetchData();
@@ -42,14 +43,27 @@ const ShowBeneficiary = () => {
     try {
       const result = await userService.getBeneficiaries(authUser?.userId);
       console.log(result);
-      setAcc(result?.data)
+      setBenef(result?.data)
     } catch (error) {
       console.log("Err : " , error);
     }
   }
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const entriesPerPage = 2;
 
-  console.log(acc);
+  const indexOfLastEntry = currentPage * entriesPerPage;
+  const indexOfFirstEntry = indexOfLastEntry - entriesPerPage;
+  const currentEntries = benef.slice(indexOfFirstEntry, indexOfLastEntry);
+
+  const totalPages = Math.ceil(benef.length / entriesPerPage);
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+
+  console.log(benef);
   
 
 
@@ -68,7 +82,7 @@ const ShowBeneficiary = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {acc?.map((row, index) => (
+                {currentEntries?.map((row, index) => (
                   <TableRow key={index}>
                     <TableCell>{row.benefName}</TableCell>
                     <TableCell>{row.benef}</TableCell>
@@ -78,6 +92,14 @@ const ShowBeneficiary = () => {
               </TableBody>
             </Table>
           </TableContainer>
+          <Container sx={{ marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Pagination
+                count={totalPages}
+                page={currentPage}
+                onChange={(event, newPage) => handlePageChange(newPage)}
+                color="primary"
+              />
+          </Container>
         </Paper>
       </Container>
     </div>

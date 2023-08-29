@@ -31,6 +31,8 @@ import userService from '../services/userService';
 import authService from "../services/authService";
 import AdminSidebar from '../components/AdminSidebar';
 import toast  from 'react-hot-toast';
+import Pagination from '@mui/material/Pagination';
+
 
 const style = {
   position: 'absolute',
@@ -58,13 +60,28 @@ function PendingUsers() {
     const authUser = authService.getAuthUser();  
     const fetchData =  async () => {
         try {
-        const result = await userService.getPendingUsers();
-        console.log(result);
-        setPendingUsers(result?.data)
+          const result = await userService.getPendingUsers();
+          console.log(result);
+          const sortedRes = result?.data.sort((a, b) => b.accNo - a.accNo)
+          setPendingUsers(sortedRes)
         } catch (error) {
-        console.log("Err : " , error);
+          console.log("Err : " , error);
         }
     }
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const entriesPerPage = 2;
+
+    const indexOfLastEntry = currentPage * entriesPerPage;
+    const indexOfFirstEntry = indexOfLastEntry - entriesPerPage;
+    const currentEntries = pendingUsers.slice(indexOfFirstEntry, indexOfLastEntry);
+
+    const totalPages = Math.ceil(pendingUsers.length / entriesPerPage);
+
+    const handlePageChange = (newPage) => {
+      setCurrentPage(newPage);
+    };
+
 
     const handleDelete = (index) => {
       const pendingUser = pendingUsers[index];
@@ -160,7 +177,7 @@ function PendingUsers() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {pendingUsers.map((user, index) => (
+                  {currentEntries.map((user, index) => (
                     <TableRow key={index}>
                       <TableCell>{user?.accNo}</TableCell>
                       <TableCell>{user?.firstName}</TableCell>
@@ -237,6 +254,14 @@ function PendingUsers() {
                 }
               </Table>
             </TableContainer>
+            <Container sx={{ marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Pagination
+                count={totalPages}
+                page={currentPage}
+                onChange={(event, newPage) => handlePageChange(newPage)}
+                color="primary"
+              />
+          </Container>
           </Paper>
         </Container>
     </div>

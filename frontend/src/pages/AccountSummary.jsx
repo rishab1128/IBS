@@ -20,6 +20,8 @@ import userService from '../services/userService';
 import authService from "../services/authService";
 import ShowBalance from '../components/ShowBalance';
 import Navbar from '../components/Navbar';
+import Pagination from '@mui/material/Pagination';
+
 
 
 
@@ -33,12 +35,12 @@ const AccountSummary = () => {
   const authUser = authService.getAuthUser();
 
   const [acc,setAcc] = useState([{
-    "payer": 2,
-    "receiver": 1,
-    "mode": "neft",
-    "transId": 17111,
-    "amount": 60
-}]);
+    // "payer": 2,
+    // "receiver": 1,
+    // "mode": "neft",
+    // "transId": 17111,
+    // "amount": 60
+  }]);
 
   useEffect(() => {
     fetchData();
@@ -47,12 +49,26 @@ const AccountSummary = () => {
   const fetchData =  async () => {
     try {
       const result = await userService.getUserTransaction(authUser?.userId);
+      const sortedRes = result?.data.sort((a, b) => b.transId - a.transId);
       console.log(result);
-      setAcc(result?.data)
+      setAcc(sortedRes)
     } catch (error) {
       console.log("Err : " , error);
     }
   }
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const entriesPerPage = 7;
+
+  const indexOfLastEntry = currentPage * entriesPerPage;
+  const indexOfFirstEntry = indexOfLastEntry - entriesPerPage;
+  const currentEntries = acc.slice(indexOfFirstEntry, indexOfLastEntry);
+
+  const totalPages = Math.ceil(acc.length / entriesPerPage);
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
 
 
   console.log(acc);
@@ -77,7 +93,7 @@ const AccountSummary = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {acc?.map((row, index) => (
+                {currentEntries?.map((row, index) => (
                   <TableRow key={index}>
                     <TableCell>{row.payer}</TableCell>
                     <TableCell>{row.receiver}</TableCell>
@@ -90,6 +106,14 @@ const AccountSummary = () => {
               </TableBody>
             </Table>
           </TableContainer>
+          <Container sx={{ marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Pagination
+              count={totalPages}
+              page={currentPage}
+              onChange={(event, newPage) => handlePageChange(newPage)}
+              color="primary"
+            />
+        </Container>
         </Paper>
       </Container>
     </div>
