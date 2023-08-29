@@ -5,6 +5,11 @@ import {
   AppBar,
   Toolbar,
   IconButton,
+  Modal,
+  Paper,
+  List,
+  ListItem,
+  Alert
 } from '@mui/material';
 import {useState, useEffect} from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -23,77 +28,121 @@ import Navbar from "../components/Navbar";
 
 // create schema validation
 const schema = yup.object({
-  // payer: yup.number().required('Payer Account Number is required').matches(accountRegEx, 'Account Number should be of 3 digits'),
-  // receiver: yup.number().required('Receiver Account Number is required').matches(accountRegEx, 'Account Number should be of 3 digits'),
-  // amount: yup.number().required('Amount to be transfered is required'),
-  mode: yup.string().required('Mode of payment is reqd')
+  receiver: yup.string().required('Receiver Account Number is required'),
+  amount: yup.string().required('Amount to be transfered is required'),
+  mode: yup.string().required('Mode of payment is required')
 });
 
-const FundTransfer = () => {
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
-
-  const toggleSidebar = () => {
-    setSidebarOpen(!isSidebarOpen);
-  };
+const FundTransfer2 = () => {
+  
+    const [modalOpen, setModalOpen] = useState(false);
+    const [transactionStatus, setTransactionStatus] = useState(null);
+    const [transactionData, setTransactionData] = useState(null);
+    const [errorMsg , setErrorMsg] = useState('');
 
   
-  const accInfo = authService.getAccountInfo();
-  console.log(accInfo);
+    const accInfo = authService.getAccountInfo();
+    console.log(accInfo);
 
-  const { handleSubmit, reset, formState: { errors }, control } = useForm({
-    defaultValues: {
-      payer: `${accInfo?.accountNumber}`,
-      receiver: '',
-      amount:'',
-      mode:'neft'
-    },
-    resolver: yupResolver(schema)
-  });
+    const { handleSubmit, reset, formState: { errors }, control } = useForm({
+        defaultValues: {
+        payer: `${accInfo?.accountNumber}`,
+        receiver: '',
+        amount:'',
+        mode:''
+        },
+        resolver: yupResolver(schema)
+    });
 
-  const navigate = useNavigate();
-  const onSubmit = (data) => {
-      // console.log(data);
-      userService.fundTransfer(data).then((res)=>{
-        console.log(res);
-        navigate({pathname:`/userDashboard/${accInfo?.userId}`}, {state:{userId: accInfo?.userId}});
-      }).catch((error)=>{
-        console.log(error);
-      })
-      reset();
-  }
+    const navigate = useNavigate();
+    const onSubmit = (data) => {
+        // console.log(data);
+        userService.fundTransfer(data).then((res)=>{
+            console.log(res);
+            setTransactionStatus("success");
+            setTransactionData(res.data);
+            setErrorMsg('');
+            // setTimeout(()=>navigate({pathname:`/userDashboard/${accInfo?.userId}`}, {state:{userId: accInfo?.userId}},1000));
+        }).catch((error)=>{
+            console.log(error);
+            setTransactionStatus("error");
+            setErrorMsg(`${error.data.messageString}`);
+        }).finally(() => {
+            setModalOpen(true);
+        });
+        reset();
+    }
 
-  return (
-    <div style={{ display: 'flex', minHeight: '100vh' }}>
-      <Navbar/>
-      <Container maxWidth="xs">
-        <Box sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          mt: '4rem',
-          alignItems: 'center'
-        }}>
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <SwapHorizIcon/>
-          </Avatar>
-          <Typography component='h1'>FUND TRANSFER</Typography>
+    const handleCloseModal = () => {
+        setModalOpen(false);
+        setTransactionStatus(null);
+        setTransactionData(null);
+    };
 
-          {/* Form */}
-          <Box noValidate component='form' onSubmit={handleSubmit(onSubmit)} sx={{width: '100%', mt: '2rem' }}>
-            <TextFields disabled={true} errors={errors} control={control} name='payer' label='From Account Number' />
-            <TextFields errors={errors} control={control} name='receiver' label='To Account Number' />
-            <TextFields errors={errors} control={control} name='amount' label='Amount to be transfered' />
-            <SelectFields errors={errors} control={control} name='mode' label='Mode of Transfer'/>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >Transfer</Button>
-          </Box>
-        </Box>
-      </Container>
-    </div>
-  )
+    let objectDate = new Date();
+
+    let day = objectDate.getDate();
+
+    let month = objectDate.getMonth()+1;
+
+    let year = objectDate.getFullYear();
+
+    let dateFormat = day + "/" + month + "/" + year;
+
+    return (
+        <div style={{ display: 'flex', minHeight: '100vh' }}>
+        <Navbar/>
+        <Container maxWidth="xs">
+            <Box sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            mt: '4rem',
+            alignItems: 'center'
+            }}>
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                <SwapHorizIcon/>
+            </Avatar>
+            <Typography component='h1'>FUND TRANSFER</Typography>
+
+            {/* Form */}
+            <Box noValidate component='form' onSubmit={handleSubmit(onSubmit)} sx={{width: '100%', mt: '2rem' }}>
+                <TextFields disabled={true} errors={errors} control={control} name='payer' label='From Account Number' />
+                <TextFields errors={errors} control={control} name='receiver' label='To Account Number' />
+                <TextFields errors={errors} control={control} name='amount' label='Amount to be transfered' />
+                <SelectFields errors={errors} control={control} name='mode' label='Mode of Transfer'/>
+                <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                >Transfer</Button>
+            </Box>
+            </Box>
+        </Container>
+        <Modal open={modalOpen} onClose={handleCloseModal}>
+            <Paper sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 400, bgcolor: 'background.paper', boxShadow: 24, p: 4 }}>
+                {transactionStatus === "success" ? (
+                <>
+                    <Typography variant="h6" color="success.main">Transaction Successful</Typography>
+                    <List>
+                        <ListItem><b>Transaction ID</b> : {transactionData.transId} </ListItem>
+                        <ListItem><b>Mode of Transfer</b> : {transactionData.mode} </ListItem>
+                        <ListItem><b>Paid to Account Number</b> : {transactionData.receiver} </ListItem>
+                        <ListItem><b>Amount Transferred</b> : {transactionData.amount}</ListItem>
+                        <ListItem><b>From Account Number</b> : {transactionData.payer} </ListItem>
+                        <ListItem><b>On (Date)</b> : {dateFormat}</ListItem>
+                    </List>
+                </>
+                ) : (
+                <>
+                    <Typography variant="h6" color="error.main">Transaction Unsuccessful</Typography>
+                    <Alert severity="error">{errorMsg.substring(0,errorMsg.length-4)}</Alert>
+                </>
+                )}
+            </Paper>
+        </Modal>
+        </div>
+    )
 }
 
-export default FundTransfer;
+export default FundTransfer2;

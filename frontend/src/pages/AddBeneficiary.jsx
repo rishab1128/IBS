@@ -83,7 +83,7 @@ const AddBeneficiary = () => {
                         fullWidth
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}
-                        disabled={isSubmitted || !isDirty || !isValid}
+                        // disabled={isSubmitted || !isDirty || !isValid}
                     >Add Beneficiary</Button>
                 </Box>
                 <Button

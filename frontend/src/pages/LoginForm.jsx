@@ -110,7 +110,7 @@ const LoginForm = () => {
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
-            disabled={isSubmitted || !isDirty || !isValid}
+            // disabled={isSubmitted || !isDirty || !isValid}
           >Login</Button>
         </Box>
         <p>First time User?<Link to="/register"> Register</Link></p>

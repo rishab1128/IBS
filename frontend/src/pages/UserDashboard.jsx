@@ -47,6 +47,8 @@ const UserDashboard = () => {
 
   const accountInfo = {
     userId : authUser?.userId,
+    firstName: user?.firstName,
+    lastName: user?.lastName,
     accountNumber: user?.accNo,
     accBalance: user?.accBalance,
     aadharNumber: user?.aadharNo,
@@ -88,6 +90,7 @@ const UserDashboard = () => {
           <Grid item xs={12} md={8} lg={6}>
             <Paper elevation={3} sx={{ p: 3, height: '100%' }}>
               <Typography variant="h5">Account Information</Typography>
+              <Typography variant="body1">Full Name: {accountInfo.firstName} {accountInfo.lastName}</Typography>
               <Typography variant="body1">User ID: {accountInfo.userId}</Typography>
               <Typography variant="body1">Account Bal: {accountInfo.accBalance}</Typography>
               <Typography variant="body1">Account Number: {accountInfo.accountNumber}</Typography>
