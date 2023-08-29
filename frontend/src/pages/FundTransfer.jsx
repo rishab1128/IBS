@@ -41,18 +41,19 @@ const FundTransfer2 = () => {
     const [errorMsg , setErrorMsg] = useState('');
 
   
-    const accInfo = authService.getAccountInfo();
-    console.log(accInfo);
+    const accountInfo = authService.getAccountInfo();
+    console.log(accountInfo);
 
     const { handleSubmit, reset, formState: { errors }, control } = useForm({
         defaultValues: {
-        payer: `${accInfo?.accountNumber}`,
+        payer: `${accountInfo?.accountNumber}`,
         receiver: '',
         amount:'',
         mode:''
         },
         resolver: yupResolver(schema)
     });
+    
 
     const navigate = useNavigate();
     const onSubmit = (data) => {
@@ -60,9 +61,10 @@ const FundTransfer2 = () => {
         userService.fundTransfer(data).then((res)=>{
             console.log(res);
             setTransactionStatus("success");
+            accountInfo.accBalance -= res.data.amount;
+            localStorage.setItem('accountInfo',JSON.stringify(accountInfo));
             setTransactionData(res.data);
             setErrorMsg('');
-            // setTimeout(()=>navigate({pathname:`/userDashboard/${accInfo?.userId}`}, {state:{userId: accInfo?.userId}},1000));
         }).catch((error)=>{
             console.log(error);
             setTransactionStatus("error");

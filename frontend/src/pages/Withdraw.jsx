@@ -29,7 +29,7 @@ import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 
 // create schema validation
 const schema = yup.object({
-    value: yup.number().required('Amount to withdrawn is required'),
+    value: yup.string().required('Amount to withdrawn is required'),
 });
 
 const Withdraw = () => {
@@ -40,26 +40,26 @@ const Withdraw = () => {
     const [errorMsg , setErrorMsg] = useState('');
 
   
-    const accInfo = authService.getAccountInfo();
-    console.log(accInfo);
+    const accountInfo = authService.getAccountInfo();
+    console.log(accountInfo);
 
     const { handleSubmit, reset, formState: { errors }, control } = useForm({
         defaultValues: {
-        accNo: `${accInfo?.accountNumber}`,
+        accNo: `${accountInfo?.accountNumber}`,
         value:'',
         },
         resolver: yupResolver(schema)
     });
 
-    const navigate = useNavigate();
     const onSubmit = (data) => {
-        console.log(data);
+        // console.log(data);
         userService.postWithdrawal(data).then((res)=>{
             console.log(res);
             setTransactionStatus("success");
+            accountInfo.accBalance = res?.data?.accBalance;
+            localStorage.setItem('accountInfo',JSON.stringify(accountInfo));
             setTransactionData(res.data);
             setErrorMsg('');
-            // setTimeout(()=>navigate({pathname:`/userDashboard/${accInfo?.userId}`}, {state:{userId: accInfo?.userId}},1000));
         }).catch((error)=>{
             console.log(error);
             setTransactionStatus("error");
@@ -118,14 +118,14 @@ const Withdraw = () => {
             <Paper sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 400, bgcolor: 'background.paper', boxShadow: 24, p: 4 }}>
                 {transactionStatus === "success" ? (
                 <>
-                    <Typography variant="h6" color="success.main">Transaction Successful</Typography>
+                    <Typography variant="h6" color="success.main">Withdrawal Successful</Typography>
                     <List>
                         <ListItem><b>On (Date)</b> : {dateFormat}</ListItem>
                     </List>
                 </>
                 ) : (
                 <>
-                    <Typography variant="h6" color="error.main">Transaction Unsuccessful</Typography>
+                    <Typography variant="h6" color="error.main">Withdrawal Unsuccessful</Typography>
                     <Alert severity="error">ERROR! {errorMsg}</Alert>
                 </>
                 )}
