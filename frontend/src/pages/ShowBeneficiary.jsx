@@ -1,10 +1,5 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
-  CssBaseline,
-  AppBar,
-  Toolbar,
-  IconButton,
-  Typography,
   Container,
   Paper,
   Table,
@@ -13,41 +8,30 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-} from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import Sidebar from '../components/Sidebar';
-import userService from '../services/userService';
+} from "@mui/material";
+import userService from "../services/userService";
 import authService from "../services/authService";
-import ShowBalance from '../components/ShowBalance';
-import Navbar from '../components/Navbar';
-import Pagination from '@mui/material/Pagination';
-
-
+import Navbar from "../components/Navbar";
+import Pagination from "@mui/material/Pagination";
 
 const ShowBeneficiary = () => {
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
-
-  const toggleSidebar = () => {
-    setSidebarOpen(!isSidebarOpen);
-  };
-
   const authUser = authService.getAuthUser();
 
-  const [benef,setBenef] = useState([{}]);
+  const [benef, setBenef] = useState([{}]);
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  const fetchData =  async () => {
+  const fetchData = async () => {
     try {
       const result = await userService.getBeneficiaries(authUser?.userId);
       console.log(result);
-      setBenef(result?.data)
+      setBenef(result?.data);
     } catch (error) {
-      console.log("Err : " , error);
+      console.log("Err : ", error);
     }
-  }
+  };
 
   const [currentPage, setCurrentPage] = useState(1);
   const entriesPerPage = 2;
@@ -62,16 +46,21 @@ const ShowBeneficiary = () => {
     setCurrentPage(newPage);
   };
 
-
   console.log(benef);
-  
-
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh' }}>
-      <Navbar/>
-      <Container sx={{ marginTop: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-        <Paper elevation={3} sx={{ p: 3, width: '100%', maxWidth: '800px' }}>
+    <div style={{ display: "flex", minHeight: "100vh" }}>
+      <Navbar />
+      <Container
+        sx={{
+          marginTop: "80px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flex: 1,
+        }}
+      >
+        <Paper elevation={3} sx={{ p: 3, width: "100%", maxWidth: "800px" }}>
           <TableContainer>
             <Table>
               <TableHead>
@@ -92,13 +81,20 @@ const ShowBeneficiary = () => {
               </TableBody>
             </Table>
           </TableContainer>
-          <Container sx={{ marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Pagination
-                count={totalPages}
-                page={currentPage}
-                onChange={(event, newPage) => handlePageChange(newPage)}
-                color="primary"
-              />
+          <Container
+            sx={{
+              marginBottom: "20px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Pagination
+              count={totalPages}
+              page={currentPage}
+              onChange={(event, newPage) => handlePageChange(newPage)}
+              color="primary"
+            />
           </Container>
         </Paper>
       </Container>

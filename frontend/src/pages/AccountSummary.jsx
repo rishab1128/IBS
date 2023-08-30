@@ -1,10 +1,5 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
-  CssBaseline,
-  AppBar,
-  Toolbar,
-  IconButton,
-  Typography,
   Container,
   Paper,
   Table,
@@ -13,49 +8,31 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-} from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import Sidebar from '../components/Sidebar';
-import userService from '../services/userService';
+} from "@mui/material";
+import userService from "../services/userService";
 import authService from "../services/authService";
-import ShowBalance from '../components/ShowBalance';
-import Navbar from '../components/Navbar';
-import Pagination from '@mui/material/Pagination';
-
-
-
+import Navbar from "../components/Navbar";
+import Pagination from "@mui/material/Pagination";
 
 const AccountSummary = () => {
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
-
-  const toggleSidebar = () => {
-    setSidebarOpen(!isSidebarOpen);
-  };
-
   const authUser = authService.getAuthUser();
 
-  const [acc,setAcc] = useState([{
-    // "payer": 2,
-    // "receiver": 1,
-    // "mode": "neft",
-    // "transId": 17111,
-    // "amount": 60
-  }]);
+  const [acc, setAcc] = useState([{}]);
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  const fetchData =  async () => {
+  const fetchData = async () => {
     try {
       const result = await userService.getUserTransaction(authUser?.userId);
       const sortedRes = result?.data.sort((a, b) => b.transId - a.transId);
       console.log(result);
-      setAcc(sortedRes)
+      setAcc(sortedRes);
     } catch (error) {
-      console.log("Err : " , error);
+      console.log("Err : ", error);
     }
-  }
+  };
 
   const [currentPage, setCurrentPage] = useState(1);
   const entriesPerPage = 7;
@@ -70,16 +47,21 @@ const AccountSummary = () => {
     setCurrentPage(newPage);
   };
 
-
   console.log(acc);
-  
-
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh' }}>
-      <Navbar/>
-      <Container sx={{ marginTop: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-        <Paper elevation={3} sx={{ p: 3, width: '100%', maxWidth: '800px' }}>
+    <div style={{ display: "flex", minHeight: "100vh" }}>
+      <Navbar />
+      <Container
+        sx={{
+          marginTop: "80px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flex: 1,
+        }}
+      >
+        <Paper elevation={3} sx={{ p: 3, width: "100%", maxWidth: "800px" }}>
           <TableContainer>
             <Table>
               <TableHead>
@@ -106,14 +88,21 @@ const AccountSummary = () => {
               </TableBody>
             </Table>
           </TableContainer>
-          <Container sx={{ marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Container
+            sx={{
+              marginBottom: "20px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             <Pagination
               count={totalPages}
               page={currentPage}
               onChange={(event, newPage) => handlePageChange(newPage)}
               color="primary"
             />
-        </Container>
+          </Container>
         </Paper>
       </Container>
     </div>

@@ -1,34 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from "react";
 import {
   CssBaseline,
   AppBar,
   Toolbar,
   IconButton,
   Typography,
-  Container,
-  Grid,
-  Paper,
-} from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import Button from '@mui/material/Button';
-import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
-import Sidebar from '../components/Sidebar';
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import Button from "@mui/material/Button";
+import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
+import Sidebar from "../components/Sidebar";
 import authService from "../services/authService";
-import userService from '../services/userService';
-import userAvatar from '../assets/user-avatar.jpg'; 
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
 
 const Navbar = () => {
-
   const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
     width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
+    bgcolor: "background.paper",
+    border: "2px solid #000",
     boxShadow: 24,
     p: 4,
   };
@@ -50,17 +44,30 @@ const Navbar = () => {
       <CssBaseline />
       <AppBar position="fixed">
         <Toolbar>
-          <IconButton edge="start" color="inherit" onClick={toggleSidebar} sx={{ mr: 2 }}>
+          <IconButton
+            edge="start"
+            color="inherit"
+            onClick={toggleSidebar}
+            sx={{ mr: 2 }}
+          >
             <MenuIcon />
           </IconButton>
-          <Typography style={{color:"#D3D3D3"}} variant="h6" noWrap>
-              Hello! <span style={{color:"white"}}>{accountInfo.userId}</span>
+          <Typography style={{ color: "#D3D3D3" }} variant="h6" noWrap>
+            Hello! <span style={{ color: "white" }}>{accountInfo.userId}</span>
           </Typography>
-          <Button variant="contained" color="secondary" startIcon={<CurrencyRupeeIcon />} sx={{
-              marginLeft: 'auto',
-              mt: { xs: 2, md: 3 }, 
-              mb: { xs: 0, md: 3 }, 
-            }} onClick={handleOpen}>Show Balance</Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            startIcon={<CurrencyRupeeIcon />}
+            sx={{
+              marginLeft: "auto",
+              mt: { xs: 2, md: 3 },
+              mb: { xs: 0, md: 3 },
+            }}
+            onClick={handleOpen}
+          >
+            Show Balance
+          </Button>
           <Modal
             open={open}
             onClose={handleClose}
@@ -80,7 +87,7 @@ const Navbar = () => {
       </AppBar>
       <Sidebar isOpen={isSidebarOpen} onClose={toggleSidebar} />
     </>
-  )
-}
+  );
+};
 
 export default Navbar;
