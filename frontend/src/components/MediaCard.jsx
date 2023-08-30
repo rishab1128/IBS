@@ -19,18 +19,18 @@ export default function MediaCard(props) {
       <CardMedia
         image={require("../assets/user-avatar.jpg")}
         title="user avatar"
-        sx={{ height: 140, padding: "1em 1em 0 1em", objectFit: "cover" }}
+        sx={{ height: 340, padding: "1em 1em 0 1em", objectFit: "contain" }}
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {props.title}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="h6" color="text.secondary">
           {props.compBody}
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={handleClick}>Show</Button>
+        <Button size="large" onClick={handleClick}>Show</Button>
       </CardActions>
     </Card>
   );

@@ -150,7 +150,7 @@ function PendingUsers() {
             </Toolbar>
       </AppBar>
       <AdminSidebar isOpen={isSidebarOpen} onClose={toggleSidebar} />
-      <Container sx={{ marginTop: '80px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', flex: 1 }}>
+      <Container sx={{ marginTop: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
         <Paper elevation={3} sx={{ p: 3, width: '100%', maxWidth: '800px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
               <TextField

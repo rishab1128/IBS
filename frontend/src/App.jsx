@@ -5,7 +5,6 @@ import RegisterForm from './pages/RegisterForm';
 import OpenAccountForm from './pages/OpenAccountForm';
 import SetNewPassword from './pages/SetNewPassword';
 import EnterOtp from './pages/EnterOtp';
-import LoginForm from './pages/LoginForm';
 import ForgotCredentials from './pages/ForgotCredentials';
 import AccountSummary from './pages/AccountSummary';
 import NotFound from './pages/NotFound'; 
@@ -20,7 +19,7 @@ import FundTransfer from './pages/FundTransfer';
 import AdminLogin from './pages/AdminLogin';
 import Withdraw from './pages/Withdraw';
 import ShowBeneficiary from './pages/ShowBeneficiary';
-import LoginForm2 from './pages/LoginForm2';
+import LoginForm from './pages/LoginForm';
 import { Toaster } from 'react-hot-toast';
 
 
@@ -36,7 +35,7 @@ function App() {
             <Route path="/" exact element={authUser?<UserDashboard/>:<HomePage/>} />
             <Route path="/openaccount" element={<OpenAccountForm/>}/>
             <Route path="/register" element={<RegisterForm/>}/>
-            <Route path="/login" element={<LoginForm2/>} />
+            <Route path="/login" element={<LoginForm/>} />
             <Route path="/enterOtp" element={<EnterOtp/>} />
             <Route path="/setnewpassword" element={<SetNewPassword/>} />
             <Route path="/forgotcredentials" element={<ForgotCredentials/>} />

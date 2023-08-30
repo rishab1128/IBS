@@ -20,7 +20,7 @@ const schema = yup.object({
   loginPass: yup.string().required('Login Password is required').matches(pswdRegEx, 'Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character'),
 });
 
-const LoginForm = () => {
+const LoginForm2 = () => {
   const { handleSubmit, reset, formState: { errors, isDirty, isValid }, control } = useForm({
     defaultValues: {
       userId: '',
@@ -29,9 +29,12 @@ const LoginForm = () => {
     resolver: yupResolver(schema)
   });
 
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const navigate = useNavigate();
   const authUser = authService.getAuthUser();
+
+  const [consecutiveAttempts, setConsecutiveAttempts] = useState(0);
+  const [isLoginDisabled, setIsLoginDisabled] = useState(false);
+  const [countdown, setCountdown] = useState(0);
 
   useEffect(() => {
     let isAuth = JSON.parse(localStorage.getItem('authUser'));
@@ -40,27 +43,36 @@ const LoginForm = () => {
     }
   }, []);
 
-  
 
   const onSubmit = async (data) => {
-    setIsSubmitted(true);
     console.log(data);
     try {
-      const result = await authService.login(data);
-      if (result?.data?.jwtToken) {
+        const result = await authService.login(data);
+        setConsecutiveAttempts(0);
         console.log("JWT : ", result.data.jwtToken);
         toast.success("Successfully Logged In");
         navigate({pathname:`/userDashboard/${data.userId}`}, {state:{userId: data.userId}});
-      }
-      else{
-        toast.error("You have entered invalid credentials");
-      }
+        
     } catch (error) {
-      console.log("err" , error);
-      toast.error("Invalid credentials");
+        console.log("err" , error);
+        setConsecutiveAttempts(consecutiveAttempts + 1);
+        if (consecutiveAttempts >= 3) {
+            toast.error("3 consecutive login attempts. Try again after 30 seconds.");
+            setIsLoginDisabled(true);
+            setCountdown(30);
+            const countdownInterval = setInterval(() => {
+                setCountdown((prevCountdown) => prevCountdown - 1);
+            }, 1000);
+            setTimeout(() => {
+                clearInterval(countdownInterval);
+                setCountdown(0);
+                setIsLoginDisabled(false);
+            }, 30000);
+            return;
+        }
+        toast.error("Invalid credentials");
     }
     
-    setIsSubmitted(false)
     reset();
     
   }
@@ -77,7 +89,7 @@ const LoginForm = () => {
   };
 
   return (
-    <Container maxWidth="xs">
+    <Container maxWidth="xs" sx={{ marginTop: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
       <CssBaseline />
         <AppBar position="absolute">
             <Toolbar>
@@ -103,16 +115,21 @@ const LoginForm = () => {
 
         {/* Form */}
         <Box noValidate component='form' onSubmit={handleSubmit(onSubmit)} sx={{width: '100%', mt: '2rem' }}>
-          <TextFields errors={errors} control={control} name='userId' label='Enter User ID' />
-          <PasswordFields errors={errors} control={control} name='loginPass' label='Enter Login Password' type="password"/>
+          <TextFields   errors={errors} control={control} name='userId' label='Enter User ID' />
+          <PasswordFields   errors={errors} control={control} name='loginPass' label='Enter Login Password' type="password"/>
           <Button
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
-            // disabled={isSubmitted || !isDirty || !isValid}
+            disabled={isLoginDisabled}
           >Login</Button>
         </Box>
+        {countdown > 0 && (
+        <Typography sx={{ color: 'red', mt: 2 }}>
+          Please wait {countdown} seconds before attempting again.
+        </Typography>
+         )}
         <p>First time User?<Link to="/register"> Register</Link></p>
         <p>Forgot<Link to="/forgotcredentials" state={userIdTitle}> UserID?</Link></p>
         <p>Forgot<Link to="/forgotcredentials" state={pswdTitle}> Password?</Link></p>
@@ -121,5 +138,4 @@ const LoginForm = () => {
   )
 }
 
-// export default {LoginForm,userId};
-export default LoginForm;
+export default LoginForm2;

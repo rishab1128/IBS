@@ -70,7 +70,7 @@ const ShowBeneficiary = () => {
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
       <Navbar/>
-      <Container sx={{ marginTop: '80px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', flex: 1 }}>
+      <Container sx={{ marginTop: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
         <Paper elevation={3} sx={{ p: 3, width: '100%', maxWidth: '800px' }}>
           <TableContainer>
             <Table>

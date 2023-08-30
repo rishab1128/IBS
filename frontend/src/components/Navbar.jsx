@@ -53,10 +53,14 @@ const Navbar = () => {
           <IconButton edge="start" color="inherit" onClick={toggleSidebar} sx={{ mr: 2 }}>
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap>
-              Hello! {accountInfo.userId}
+          <Typography style={{color:"#D3D3D3"}} variant="h6" noWrap>
+              Hello! <span style={{color:"white"}}>{accountInfo.userId}</span>
           </Typography>
-          <Button variant="contained" color="secondary" startIcon={<CurrencyRupeeIcon />} sx={{ marginLeft: "auto" }} onClick={handleOpen}>Show Balance</Button>
+          <Button variant="contained" color="secondary" startIcon={<CurrencyRupeeIcon />} sx={{
+              marginLeft: 'auto',
+              mt: { xs: 2, md: 3 }, 
+              mb: { xs: 0, md: 3 }, 
+            }} onClick={handleOpen}>Show Balance</Button>
           <Modal
             open={open}
             onClose={handleClose}

@@ -21,7 +21,7 @@ const FormSidebar = ({ isOpen, onClose }) => {
 
   return (
     <Drawer anchor="left" open={isOpen} onClose={onClose}>
-      <div style={{ marginTop: '30px', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ marginTop: '50px', display: 'flex', flexDirection: 'column' }}>
         <IconButton
           color="inherit"
           aria-label="Close"

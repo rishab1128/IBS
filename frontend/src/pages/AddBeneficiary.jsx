@@ -60,7 +60,7 @@ const AddBeneficiary = () => {
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
       <Navbar/>
-        <Container maxWidth="xs">
+        <Container maxWidth="xs" sx={{ marginTop: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
             <Box sx={{
                 display: 'flex',
                 flexDirection: 'column',

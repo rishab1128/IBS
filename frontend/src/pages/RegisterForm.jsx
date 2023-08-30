@@ -69,7 +69,7 @@ const RegisterForm = () => {
   };
 
   return (
-    <Container maxWidth="xs">
+    <Container maxWidth="xs" sx={{ marginTop: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
       <CssBaseline />
         <AppBar position="absolute">
             <Toolbar>

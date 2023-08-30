@@ -44,14 +44,24 @@ const AdminDashboard = () => {
             </Toolbar>
       </AppBar>
       <AdminSidebar isOpen={isSidebarOpen} onClose={toggleSidebar} />
-      <Container sx={{ marginTop: '80px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', flex: 1 }}>
+      <Container sx={{ marginTop: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
         <Grid container spacing={3} justifyContent="center">
-            <Grid item xs={12} md={8} lg={6}>
-                <MediaCard title="Show Pending Requests" compBody="These users have not been approved by the admin yet." propLink="/pendingUsers"/>
-            </Grid>
-            <Grid item xs={12} md={8} lg={6}>
-                <MediaCard title="Show Approved Users" compBody="These users have been approved and have a acc in our bank" propLink="/approvedUsers"/>
-            </Grid>
+          <Grid item xs={12} md={8} lg={6}>
+            <MediaCard
+              title="Show Pending Requests"
+              compBody="These users have not been approved by the admin yet."
+              propLink="/pendingUsers"
+              imageSrc={userAvatar} 
+            />
+          </Grid>
+          <Grid item xs={12} md={8} lg={6}>
+            <MediaCard
+              title="Show Approved Users"
+              compBody="These users have been approved and have an account in our bank"
+              propLink="/approvedUsers"
+              imageSrc={userAvatar} 
+            />
+          </Grid>
         </Grid>
       </Container>
     </div> 
