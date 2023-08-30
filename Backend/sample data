@@ -1,0 +1,26 @@
+{
+    "accNo" : 423423281,
+    "firstName":"tryinng123",
+    "lastName":"rudrannwjkdfnocenc",
+    "mobile":"kjlgtrnounignu",
+    "email":"rudra@gmailn.com",
+    "aadharNo":"123456789n123445634",
+    "panNo":"nfoirnru98n",
+    "dob":"20092001n"
+}
+
+{
+    "userId":"thisisID",
+    "user1":{
+        "accNo":1231231,
+        "firstName":"Mahendra",
+        "lastName":"Singh",
+        "mobile":"12312312311",
+        "email":"ms@gmail.com",
+        "aadharNo":"1234567891234567890",
+        "panNo":"12312312313",
+        "dob":"123123123"
+    },
+    "loginPass":"password",
+    "transPass":"password"
+}
